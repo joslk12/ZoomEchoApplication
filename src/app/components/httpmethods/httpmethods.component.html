@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col">
+      <div class="list-group col-8 col-offset-2">
+          <h5>Select a method:</h5>
+          <button *ngFor="let method of methods" type="button" class="list-group-item list-group-item-action" (click) = "selectMethod(method)">
+            {{method}}
+          </button>
+        </div>
+    </div>
+    <div class="col">
+      <div class="col-10 formparams">
+        <form #formRef="ngForm" class="col-8">
+          <h4>Method: {{selectedMethod}}</h4>
+          <div *ngIf="showParams">
+            <h6>Parameters:</h6>
+            <div *ngFor="let param of params; let i = index" class="parameter">
+              <span>Param{{i+1}}:</span>
+              <input type="text" [(ngModel)]="params[i].param" name="name{{i}}" class="form-control" #name="ngModel" required>
+            </div>
+            <button [disabled]="!formRef.form.valid" (click)="add()" class="btn btn-primary">Add parameter</button>
+            <button [disabled]="disableRemove" (click)="remove()" class="btn btn-danger">Remove parameter</button>
+          </div>
+          <button [disabled]="sendDisabled" (click)="send()" class="btn btn-success">Send request</button>
+        </form>
+      </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-8 response">
+      <h5>Response:</h5>
+      <p>
+        {{resp | json}}
+      </p>
+    </div>
+</div>
+
+  
