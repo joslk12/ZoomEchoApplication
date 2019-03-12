@@ -16,6 +16,9 @@ export class HttpmethodsComponent implements OnInit {
   disableRemove = true;
   sendDisabled = true;
   resp = {};
+  time = 0;
+  startTime = 0;
+  endTime = 0;
 
   constructor(private http:HttpClient) {
   }
@@ -41,39 +44,50 @@ export class HttpmethodsComponent implements OnInit {
     }
   }
   send(){
+    let ref = this;
+    axios.interceptors.request.use(function (config) {
+      ref.startTime = new Date().getTime();
+      return config;
+    }, function (error) {
+      return Promise.reject(error);
+    });
+
+    axios.interceptors.response.use(function (response) {
+      ref.endTime = new Date().getTime();
+      ref.time = ref.endTime - ref.startTime;
+      return response;
+    }, function (error) {
+      return Promise.reject(error);
+    });
+
     switch(this.selectedMethod){
       case 'GET':
         axios.get(environment.apiUrl + '/data')
         .then(res => {
-          console.log(res);
           this.resp = res.data;
         });
         break;
       case 'POST':
         axios.post(environment.apiUrl + '/data', this.params)
         .then(res => {
-          console.log(res);
           this.resp = res.data;
         });
         break;
       case 'PUT':
         axios.put(environment.apiUrl + '/data', this.params)
         .then(res => {
-          console.log(res);
           this.resp = res.data;
         });
         break;
       case 'PATCH':
         axios.patch(environment.apiUrl + '/data', this.params)
         .then(res => {
-          console.log(res);
           this.resp = res.data;
         });
         break;
       case 'DELETE':
         axios.get(environment.apiUrl + '/data')
         .then(res => {
-          console.log(res);
           this.resp = res.data;
         });
         break;        
